@@ -1,0 +1,43 @@
+defaults:  
+  - _self_  
+  - override hydra/hydra_logging: none
+  - override hydra/job_logging: none
+
+# Model
+mlp_layers: [32, 64, 128, 64, 32, 16, 1]
+
+# Training
+weight_init: "xavier"
+
+optimizer: Adam
+weight_decay: 0
+learning_rate: 0.001
+lr_policy: step
+lr_gamma: 0.5 # lr decay rate
+lr_step_size: 10000
+lr_clip: 0.0001 # min lr
+
+momentum_original: 0.1
+momentum_decay: 0.5
+momentum_step_size: ${lr_step_size}  # = lr_step_size
+momentum_min: 0.01
+
+loss_weights:
+  L2_prices: 1.0
+  L1_reg: 0.0
+  L2_reg: 1.0
+
+batch_size: 1024
+total_epoch: 10000
+
+# Logging
+exp_dir: "./output/MLP/L2_reg"
+freq:
+  epoch_test: 500
+  # epoch_val: 500
+
+# Hydra
+hydra:
+    run:
+        dir: .
+    output_subdir: null
